@@ -66,7 +66,14 @@ gss_2024 <- gss_2024 |>
            factor()
   )
 
-
+gss_2024 <- gss_2024|>
+  mutate(sex1 = as_factor(sex),
+         sex1 = case_when(
+           str_detect(sex1, "1") ~ "Male",
+           str_detect(sex1, "2") ~ "Female"
+         )
+  )|>
+  filter(!is.na(sex1))
 
   
 
