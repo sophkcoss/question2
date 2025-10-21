@@ -14,7 +14,7 @@ wt_vars <- c("vpsu",     # PSU
 )   
 
 # removing user-missing values and converting the weights to numeric
-gss<-gss|>
+gss_2024 <-gss_2024|>
   zap_missing()|>
   mutate(across(wt_vars, .fns=~as.numeric(.x)))
 
@@ -113,7 +113,7 @@ propdata1 <- svygss|>
   summarise(
     prop = survey_mean(polviews3 == "Conservatives", vartype = "ci", na.rm = TRUE)
   )
-ggplot(propdata, aes(x = factor(gen_age), y = prop)) +
+ggplot(propdata1, aes(x = factor(gen_age), y = prop)) +
   geom_col(fill = "steelblue") +
   geom_errorbar(aes(ymin = prop_low, ymax = prop_upp), width = 0.2) +
   scale_y_continuous(labels = scales::percent) +
@@ -163,6 +163,30 @@ ggplot(propdata3, aes(x = factor(gen_age), y = prop)) +
     title = "Weighted estimates with 95% CI: Are Immigrants Good for America"
   ) +
   theme_minimal()
+
+#It seems that Gen Z are the most conservative generation on this issue, however,
+#confidence interval is very large, so the results are statistically insignificant
+
+#visualization 4: generations and abortion
+#Support for abortion if a woman wants it for any reason
+propdata4 <- svygss|>
+  filter(!is.na(gen_age), !is.na(abanyx))|>
+  group_by(gen_age)|>
+  summarise(
+    prop = survey_mean(abanyx == "No", vartype = "ci", na.rm = TRUE)
+  )
+ggplot(propdata4, aes(x = factor(gen_age), y = prop)) +
+  geom_col(fill = "steelblue") +
+  geom_errorbar(aes(ymin = prop_low, ymax = prop_upp), width = 0.2) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    x = "Generations",
+    y = "Weighted proportion against abortion for any reason",
+    title = "Weighted estimates with 95% CI"
+  ) +
+  theme_minimal()
+
+#Gen Z seems least conservative on this issue
 
 #It seems that Gen Z are the most conservative generation on this issue, however,
 #confidence interval is very large, so the results are statistically insignificant
