@@ -73,8 +73,6 @@ genz_polviews <- gss_refactored |>
   summarise(count = n()) |>
   mutate(percent = count / sum(count) * 100)
 
-ggplot(genz_polviews, aes(x = polviews3, y = percent, fill = polviews3)) + geom_col()
-
 genz_over_time <- gss_refactored |>
   filter(gen_age == "Gen Z", !is.na(polviews3)) |>
   group_by(year) |>
